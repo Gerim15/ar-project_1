@@ -72,27 +72,28 @@
 <script>
 const startButton = document.querySelector("#startButton");
 const video = document.querySelector("#video");
+const sceneEl = document.querySelector('a-scene');
 
 startButton.addEventListener("click", async () => {
 
   startButton.style.display = "none";
 
-  await video.play();
-  video.pause();
-
-  const sceneEl = document.querySelector('a-scene');
+  // запускаем AR
   sceneEl.systems["mindar-image-system"].start();
 
 });
 
-document.querySelector('a-scene').addEventListener("targetFound", event => {
-  video.play();
+sceneEl.addEventListener("targetFound", () => {
+
+  video.play().catch((e) => {
+    console.log(e);
+  });
+
 });
 
-document.querySelector('a-scene').addEventListener("targetLost", event => {
+sceneEl.addEventListener("targetLost", () => {
+
   video.pause();
+
 });
 </script>
-
-</body>
-</html>
