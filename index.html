@@ -77,9 +77,8 @@ startButton.addEventListener("click", async () => {
 
   startButton.style.display = "none";
 
-  await video.play();
-  video.pause();
-
+  // await video.play();
+  
   const sceneEl = document.querySelector('a-scene');
   sceneEl.systems["mindar-image-system"].start();
 
