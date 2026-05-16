@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="./aframe.min.js"></script>
+<script src="./aframe-ar-nft.js"></script>
+
+<style>
+body {
+  margin: 0;
+  overflow: hidden;
+}
+</style>
+
+</head>
+
+<body>
+
+<a-scene
+  vr-mode-ui="enabled: false;"
+  embedded
+  renderer="logarithmicDepthBuffer: true;"
+  arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
+>
+
+<a-assets>
+
+<video
+  id="video"
+  src="video.mp4"
+  preload="auto"
+  loop
+  muted
+  playsinline
+  webkit-playsinline
+></video>
+
+</a-assets>
+
+<a-nft
+  type="nft"
+  url="./nft/target"
+  smooth="true"
+  smoothCount="10"
+  smoothTolerance=".01"
+  smoothThreshold="5"
+>
+
+<a-video
+  src="#video"
+  position="0 0 0"
+  rotation="-90 0 0"
+  width="1"
+  height="1.5"
+></a-video>
+
+</a-nft>
+
+<a-entity camera></a-entity>
+
+</a-scene>
+
+<script>
+
+const nft = document.querySelector("a-nft");
+const video = document.querySelector("#video");
+
+video.muted = true;
+video.playsInline = true;
+
+document.body.addEventListener("click", async () => {
+  try {
+    await video.play();
+    video.pause();
+  } catch(e) {
+    console.log(e);
+  }
+}, { once: true });
+
+nft.addEventListener("markerFound", () => {
+  video.play();
+});
+
+nft.addEventListener("markerLost", () => {
+  video.pause();
+});
+
+</script>
