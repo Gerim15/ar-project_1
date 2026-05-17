@@ -9,103 +9,136 @@
 <script src="./aframe-ar-nft.js"></script>
 
 <style>
+
 body {
   margin: 0;
   overflow: hidden;
 }
+
+#overlayVideo {
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+
+  width: 60vw;
+
+  transform: translate(-50%, -50%);
+
+  display: none;
+
+  z-index: 10;
+
+  border-radius: 12px;
+
+}
+
+#startButton {
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  z-index: 999;
+
+  padding: 20px 40px;
+
+  font-size: 22px;
+
+  border: none;
+
+  border-radius: 12px;
+
+}
+
 </style>
 
 </head>
 
 <body>
 
+<button id="startButton">
+  Start AR
+</button>
+
 <a-scene
+
   vr-mode-ui="enabled: false;"
   embedded
   renderer="logarithmicDepthBuffer: true;"
-  arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
+
+  arjs="
+    trackingMethod: best;
+    sourceType: webcam;
+    debugUIEnabled: false;
+  "
+
 >
 
-<a-assets>
-
-<video
-  id="overlayVideo"
-  src="video.mp4"
-  playsinline
-  webkit-playsinline
-  loop
-  style="
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 60vw;
-    transform: translate(-50%, -50%);
-    display: none;
-    z-index: 10;
-    border-radius: 12px;
-  "
-></video>
-
-</a-assets>
-
 <a-nft
+
   type="nft"
   url="./nft/target"
+
   smooth="true"
   smoothCount="20"
   smoothTolerance="0.01"
   smoothThreshold="10"
+
 >
-</a-nft>
-
-<a-video
-  src="#video"
-  position="0 120 0"
-  rotation="-90 0 0"
-  width="260"
-  height="160"
-></a-video>
-
 </a-nft>
 
 <a-entity camera></a-entity>
 
 </a-scene>
 
+<video
+
+  id="overlayVideo"
+  src="video.mp4"
+
+  playsinline
+  webkit-playsinline
+
+  loop
+
+></video>
+
 <script>
 
 const nft = document.querySelector("a-nft");
+
 const video = document.querySelector("#overlayVideo");
+
+const startButton = document.querySelector("#startButton");
 
 let unlocked = false;
 
-const startButton = document.createElement("button");
-
-startButton.innerText = "Start AR";
-
-startButton.style.position = "fixed";
-startButton.style.top = "50%";
-startButton.style.left = "50%";
-startButton.style.transform = "translate(-50%, -50%)";
-startButton.style.zIndex = "999";
-startButton.style.padding = "20px 40px";
-startButton.style.fontSize = "22px";
-
-document.body.appendChild(startButton);
-
 startButton.addEventListener("click", async () => {
 
-  video.muted = true;
+  try {
 
-  await video.play();
+    // Разблокировка audio/video на iPhone
 
-  video.pause();
+    video.muted = true;
 
-  video.currentTime = 0;
+    await video.play();
 
-  unlocked = true;
+    video.pause();
 
-  startButton.style.display = "none";
+    video.currentTime = 0;
+
+    unlocked = true;
+
+    startButton.style.display = "none";
+
+  } catch(e) {
+
+    console.log(e);
+
+  }
 
 });
 
@@ -132,3 +165,7 @@ nft.addEventListener("markerLost", () => {
 });
 
 </script>
+
+</body>
+
+</html>
