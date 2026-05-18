@@ -23,7 +23,7 @@ body {
 
   transform: translate(-50%, -50%);
 
-  z-index: 999;
+  z-index: 10000;
 
   padding: 20px 40px;
 
@@ -32,6 +32,27 @@ body {
   border: none;
 
   border-radius: 12px;
+
+}
+
+#overlayVideo {
+
+  position: fixed;
+
+  top: 50%;
+  left: 50%;
+
+  width: 70vw;
+
+  transform: translate(-50%, -50%);
+
+  z-index: 9999;
+
+  background: black;
+
+  border-radius: 12px;
+
+  visibility: hidden;
 
 }
 
@@ -49,6 +70,7 @@ body {
 
   vr-mode-ui="enabled: false;"
   embedded
+
   renderer="logarithmicDepthBuffer: true;"
 
   arjs="
@@ -79,6 +101,7 @@ body {
 <video
 
   id="overlayVideo"
+
   src="video.mp4"
 
   playsinline
@@ -86,25 +109,7 @@ body {
 
   loop
 
-  style="
-    position: fixed;
-    top: 50%;
-    left: 50%;
-
-    width: 70vw;
-
-    transform: translate(-50%, -50%);
-
-    z-index: 9999;
-
-    object-fit: cover;
-
-    opacity: 0;
-
-    pointer-events: none;
-
-    border-radius: 12px;
-  "
+  controls
 
 ></video>
 
@@ -122,7 +127,7 @@ startButton.addEventListener("click", async () => {
 
   try {
 
-    // Разблокировка autoplay/audio на iPhone
+    // Разрешаем autoplay/audio на iPhone
 
     video.muted = true;
 
@@ -146,13 +151,21 @@ startButton.addEventListener("click", async () => {
 
 nft.addEventListener("markerFound", async () => {
 
-  if(unlocked) {
+  try {
 
-    video.style.opacity = "1";
+    if(unlocked) {
 
-    video.muted = false;
+      video.style.visibility = "visible";
 
-    await video.play();
+      video.muted = false;
+
+      await video.play();
+
+    }
+
+  } catch(e) {
+
+    console.log(e);
 
   }
 
@@ -162,7 +175,7 @@ nft.addEventListener("markerLost", () => {
 
   video.pause();
 
-  video.style.opacity = "0";
+  video.style.visibility = "hidden";
 
 });
 
