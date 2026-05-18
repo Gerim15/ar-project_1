@@ -15,24 +15,6 @@ body {
   overflow: hidden;
 }
 
-#overlayVideo {
-
-  position: fixed;
-  top: 50%;
-  left: 50%;
-
-  width: 60vw;
-
-  transform: translate(-50%, -50%);
-
-  display: none;
-
-  z-index: 10;
-
-  border-radius: 12px;
-
-}
-
 #startButton {
 
   position: fixed;
@@ -104,6 +86,26 @@ body {
 
   loop
 
+  style="
+    position: fixed;
+    top: 50%;
+    left: 50%;
+
+    width: 70vw;
+
+    transform: translate(-50%, -50%);
+
+    z-index: 9999;
+
+    object-fit: cover;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    border-radius: 12px;
+  "
+
 ></video>
 
 <script>
@@ -120,7 +122,7 @@ startButton.addEventListener("click", async () => {
 
   try {
 
-    // Разблокировка audio/video на iPhone
+    // Разблокировка autoplay/audio на iPhone
 
     video.muted = true;
 
@@ -146,7 +148,7 @@ nft.addEventListener("markerFound", async () => {
 
   if(unlocked) {
 
-    video.style.display = "block";
+    video.style.opacity = "1";
 
     video.muted = false;
 
@@ -160,7 +162,7 @@ nft.addEventListener("markerLost", () => {
 
   video.pause();
 
-  video.style.display = "none";
+  video.style.opacity = "0";
 
 });
 
