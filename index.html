@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="./aframe.min.js"></script>
+  <script src="./mindar-image-aframe.prod.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #startButton {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 999;
+      padding: 16px 32px;
+      font-size: 20px;
+      border-radius: 12px;
+      border: none;
+    }
+  </style>
+</head>
+
+<body>
+
+<button id="startButton">
+  Start AR
+</button>
+
+<a-scene
+  mindar-image="imageTargetSrc: target.mind;"
+  vr-mode-ui="enabled: false"
+  device-orientation-permission-ui="enabled: false"
+  embedded
+  color-space="sRGB"
+  renderer="colorManagement: true;"
+>
+
+<a-assets>
+
+<video
+  id="video"
+  src="video.mp4"
+  preload="auto"
+  loop
+  playsinline
+  webkit-playsinline
+  crossorigin="anonymous"
+></video>
+
+</a-assets>
+
+<a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+<a-entity mindar-image-target="targetIndex: 0">
+
+<a-video
+  src="#video"
+  position="0 0 0"
+  width="1"
+  height="0.56"
+></a-video>
+
+</a-entity>
+
+</a-scene>
+
+<script>
+
+const startButton = document.querySelector("#startButton");
+const video = document.querySelector("#video");
+
+let unlocked = false;
+
+startButton.addEventListener("click", async () => {
+
+  try {
+
+    video.muted = true;
+
+    await video.play();
+
+    video.pause();
+
+    video.currentTime = 0;
+
+    unlocked = true;
+
+    startButton.style.display = "none";
+
+  } catch(e) {
+
+    console.log(e);
+
+  }
+
+});
+
+document.querySelector('a-scene').addEventListener("targetFound", async () => {
+
+  if(!unlocked) return;
+
+  video.muted = false;
+
+  await video.play();
+
+});
+
+document.querySelector('a-scene').addEventListener("targetLost", () => {
+
+  video.pause();
+
+});
+
+</script>
+
+</body>
+</html>
